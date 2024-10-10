@@ -10,11 +10,7 @@ import {GoogleGenerativeAI} from '@google/generative-ai'
           {
             role: "user",
             parts: [{ text: "You are going to tbe talking to people on  a a chat app i made . Be hospitable and talk in a  casual tone analyse their texts and respond in an appropriate way" }],
-          },
-          {
-            role: "model",
-            parts: [{ text: "Great to meet you. What would you like to know?" }],
-          },
+          }
         ],
       });
     const res = await chat.sendMessage(message)

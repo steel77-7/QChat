@@ -3,6 +3,7 @@ import express from "express";
 import { createServer } from "http";
 import connectToDb from "./db/db.js";
 import { socketConnection } from "./socketServer.js";
+import cookieParser from "cookie-parser";
 import cors from 'cors'
 dotenv.config()
 const app = express();
@@ -12,10 +13,12 @@ const io = socketConnection(httpServer);
 
 app.use(
   cors({
-    origin: "*",
+    origin: "http://localhost:5173",
     methods: ["GET", "POST", "PATCH", "DELETE"],
+    credentials:true
   })
 );
+app.use(cookieParser());
 app.use(express.json());
 app.use((req, res, next) => {
   req.io = io;
@@ -24,6 +27,7 @@ app.use((req, res, next) => {
 
 
 import user from "./routes/user.routes.js"
+import { redis_client } from '../utils/redisClient.js';
 app.use('/api/user',user);
 
 connectToDb()
@@ -31,5 +35,7 @@ connectToDb()
     httpServer.listen(port, () => {
       console.log("Server listening on port :", port);
     });
+  }).then(()=> {
+    redis_client();
   })
   .catch((err) => console.log("Server error", err));

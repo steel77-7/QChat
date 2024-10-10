@@ -9,10 +9,6 @@ const userSchema = new mongoose.Schema(
       unique: true,
       lowercase: true,
     },
-    name: {
-      type: String,
-      required: true,
-    },
     username: {
       type: String,
       required: true,
@@ -53,7 +49,7 @@ userSchema.methods.generateAccessToken = async function() {
     },
     process.env.ACCESS_TOKEN_SECRET,
     {
-      expiresIn: "1h",
+      expiresIn: '15s',
     }
   );
   return res;
@@ -71,7 +67,7 @@ userSchema.methods.generateRefreshToken = async function(){
       _id: this._id,
     },
     process.env.REFRESH_TOKEN_SECRET,
-    { expiresIn: "1d" }
+    { expiresIn: '1h' }
   );
   return res;
 };

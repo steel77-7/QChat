@@ -1,5 +1,5 @@
 import { syncIndexes } from "mongoose";
-import ApiError from "../../utils/ApiError.js";
+import ApiResponse from "../../utils/ApiResponse.js";
 import ApiResponse from "../../utils/ApiResponse.js";
 import asyncHanlder from "../../utils/asyncHandler.js";
 import Chat from "../models/chat.models.js";
@@ -19,7 +19,7 @@ export const createChat = asyncHanlder(async (req, res) => {
   if (!chat) {
     return res
       .status(500)
-      .json(new ApiError(500, "Server error occured while creating chat"));
+      .json(new ApiResponse(500, "Server error occured while creating chat"));
   }
   res
     .status(200)
@@ -42,7 +42,7 @@ export const addMembers = asyncHanlder(async (req, res) => {
   );
 
   if (!chat) {
-    return res.status(404).json(new ApiError(404, "Chat not found"));
+    return res.status(404).json(new ApiResponse(404, "Chat not found"));
   }
  return res
     .status(200)

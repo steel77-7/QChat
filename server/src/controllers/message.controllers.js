@@ -1,7 +1,10 @@
-import ApiError from "../../utils/ApiError.js";
+import ApiResponse from "../../utils/ApiResponse.js";
+import ApiResponse from "../../utils/ApiResponse.js";
 import asyncHanlder from "../../utils/asyncHandler.js";
 import generateResponse from "../../utils/geminiApi.js";
+import { getOrSetCache } from "../../utils/redisClient.js";
 import Message from "../models/message.models.js";
+import Redis from "redis";
 
 export const saveMessage = asyncHanlder(async (req, res) => {
   const user = req.user;
@@ -20,14 +23,32 @@ export const saveMessage = asyncHanlder(async (req, res) => {
   });
 
   if (!saved_message) {
-    return res.status(500).json(new ApiError(500, "Message failed to save"));
+    return res.status(500).json(new ApiResponse(500, "Message failed to save"));
   }
 
-  req.io.to(chatid).emit('recieve-message',saved_message);
+  //req.io.to(chatid).emit("recieve-message", saved_message);
   //return saved_message;
 });
 
+export const fetchMessage = asyncHanlder(async (req, res) => {
+  const { chatid } = req.body;
+  const user = req.user;
 
+  const fetch_message = async () => {
+    const message = await Message.find({ chat: chatid });
+    return message;
+  };
+  const response = await getOrSetCache("message", fetch_message);
+  if (response === null || response.length === 0)
+    return res.status(404).json(new ApiResponse(404, "MEssgaes not found "));
+  res
+    .status(200)
+    .json(
+      new ApiResponse(200, { messageArray: response, data: "messages found" })
+    );
+});
+export const deleteMessage = asyncHanlder(async (req, res) => {
 
-export const deleteMessage = asyncHanlder(async (req, res) => {});
+  
+});
 export const editMessage = asyncHanlder(async (req, res) => {});
