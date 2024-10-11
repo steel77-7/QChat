@@ -8,6 +8,8 @@ import ProtectedRoutes from "./pages/ProtectedRoutes";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import { Toaster } from "sonner";
+import FriendRequest from "./pages/FriendRequest";
+import Error from "./pages/Error";
 function App() {
   return (
     <NextUIProvider>
@@ -19,7 +21,9 @@ function App() {
             <Route element={<Login />} path="/login" />
             <Route element={<ProtectedRoutes />}>
               <Route element={<Chat />} path="/" />
+              <Route element={<FriendRequest/> }path={'requests'}/> 
             </Route>
+            <Route path="*" element={<Error />} />
           </Routes>
         </Provider>
       </DefaultLayout>

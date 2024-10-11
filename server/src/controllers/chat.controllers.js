@@ -1,5 +1,3 @@
-import { syncIndexes } from "mongoose";
-import ApiResponse from "../../utils/ApiResponse.js";
 import ApiResponse from "../../utils/ApiResponse.js";
 import asyncHanlder from "../../utils/asyncHandler.js";
 import Chat from "../models/chat.models.js";
@@ -28,7 +26,6 @@ export const createChat = asyncHanlder(async (req, res) => {
 
 //export const createGroup = () => {};
 
-
 //addMembers
 export const addMembers = asyncHanlder(async (req, res) => {
   const user = req.user;
@@ -44,22 +41,23 @@ export const addMembers = asyncHanlder(async (req, res) => {
   if (!chat) {
     return res.status(404).json(new ApiResponse(404, "Chat not found"));
   }
- return res
+  return res
     .status(200)
     .json(new ApiResponse(200, { message: "Members added", data: chat }));
 });
 
-
 //delete chat
 export const deleteChat = asyncHandler(async (req, res) => {
-    const { chatid } = req.body;
-    const user = req.user;
-  
-    const chat = await Chat.findOneAndDelete({ _id: chatid, owner: user._id });
-  
-    if (!chat) {
-      return res.status(404).json({ error: "Chat not found or user unauthorized" });
-    }
-  
-    return res.status(200).json({ message: "Chat Deleted" });
-  });
+  const { chatid } = req.body;
+  const user = req.user;
+
+  const chat = await Chat.findOneAndDelete({ _id: chatid, owner: user._id });
+
+  if (!chat) {
+    return res
+      .status(404)
+      .json({ error: "Chat not found or user unauthorized" });
+  }
+
+  return res.status(200).json({ message: "Chat Deleted" });
+});

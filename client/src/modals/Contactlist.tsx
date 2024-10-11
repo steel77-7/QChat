@@ -46,7 +46,7 @@ export default function ContactList({ contacts }: { contacts: any }) {
         </h1>
         <ul className="flex flex-col  border-r-2 border-white">
           <li>
-            <IndividualContactBox />
+           {/*  <IndividualContactBox /> */}
           </li>
           {!contactList === null ? (
             contactList?.map((contact: any, index: any) => {

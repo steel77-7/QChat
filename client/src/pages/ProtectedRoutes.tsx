@@ -11,13 +11,15 @@ import { useSelector } from "react-redux";
 import { setUser, setIsAuthenticated } from "@/redux/reducers/useSlice";
 ("framer-motion");
 import { Spinner } from "@nextui-org/react";
+import useSocket from "@/hooks/userSocket";
 
 export default function ProtectedRoutes() {
   const [loading, setLoading] = useState(true);
+ 
   const isauthenticated = useSelector(
     (state: any) => state.user.isAuthenticated
   );
-
+useSocket();
   const navigate = useNavigate()
   const dispatch = useDispatch();
   useEffect(() => {
@@ -42,7 +44,9 @@ export default function ProtectedRoutes() {
     };
 
     checkuser();
-  }, [apiCall]);
+  }, []);
+  
+   
 
   return loading ? (
     <div className="flex fixed justify-center w-full h-full">
@@ -55,7 +59,7 @@ export default function ProtectedRoutes() {
       />
     </div>
   ) : isauthenticated ? (
-    <Outlet />
+   <div className="overflow-none fixed w-screen  h-screen"> <Outlet /></div>
   ) : (
     <Navigate to={"/login"} />
   );

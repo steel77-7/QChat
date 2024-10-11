@@ -1,5 +1,5 @@
 import ApiResponse from "../../utils/ApiResponse.js";
-import ApiResponse from "../../utils/ApiResponse.js";
+
 import asyncHanlder from "../../utils/asyncHandler.js";
 import generateResponse from "../../utils/geminiApi.js";
 import { getOrSetCache } from "../../utils/redisClient.js";

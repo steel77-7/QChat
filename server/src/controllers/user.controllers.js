@@ -1,5 +1,4 @@
 import ApiResponse from "../../utils/ApiResponse.js";
-import ApiResponse from "../../utils/ApiResponse.js";
 import asyncHanlder from "../../utils/asyncHandler.js";
 import User from "../models/user.models.js";
 import jwt from "jsonwebtoken";
@@ -25,9 +24,11 @@ export const registerUser = asyncHanlder(async (req, res) => {
   const regUser = await User.findOne({
     $or: [{ username }, { email }],
   });
-  console.log(regUser);
+ // console.log(regUser);
   if (regUser) {
-    return res.status(409).json(new ApiResponse(409, "User already registered"));
+    return res
+      .status(409)
+      .json(new ApiResponse(409, "User already registered"));
   }
 
   await User.create({
@@ -101,7 +102,8 @@ export const getUser = asyncHanlder(async (req, res) => {
   //console.log(req.user)
   const user = await User.findById(req.user).select("-password -refreshToken");
   //console.log(user)
-  if (!user) return res.status(404).json(new ApiResponse(404, "User not found"));
+  if (!user)
+    return res.status(404).json(new ApiResponse(404, "User not found"));
 
   return res.status(200).json(new ApiResponse(200, { user }));
 });
@@ -115,16 +117,17 @@ export const refreshToken = asyncHanlder(async (req, res) => {
   if (!refreshToken) {
     return res.status(401).json(new ApiResponse(401, "Token not present"));
   }
-//console.log(refreshToken)
+  //console.log(refreshToken)
   const user = await User.find({ refreshToken });
-  if (!user) return res.status(404).json(new ApiResponse(404, "User not found"));
+  if (!user)
+    return res.status(404).json(new ApiResponse(404, "User not found"));
   console.log(refreshToken);
   jwt.verify(
     refreshToken,
     process.env.REFRESH_TOKEN_SECRET,
     async (err, decoded) => {
       if (err) {
-        console.log('error')
+        console.log("error");
         return res.status(500).json(new ApiResponse(500, err));
       }
 
@@ -141,7 +144,8 @@ export const refreshToken = asyncHanlder(async (req, res) => {
       res
         .status(200)
         .cookie("accessToken", accessToken, options)
-        .cookie("refreshToken", refreshToken, options).json(new ApiResponse(200,""));
+        .cookie("refreshToken", refreshToken, options)
+        .json(new ApiResponse(200, ""));
     }
   );
 });
@@ -150,7 +154,7 @@ export const refreshToken = asyncHanlder(async (req, res) => {
 export const logout = asyncHanlder(async (req, res) => {
   const userid = req.user;
 
-  console.log('logout')
+  console.log("logout");
   const user = await User.findByIdAndUpdate(
     userid,
     {
@@ -164,7 +168,7 @@ export const logout = asyncHanlder(async (req, res) => {
   };
   res
     .status(200)
-    .clearcookie("accessToken", options)
-    .clearcookie("refreshToken", options)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
     .json(new ApiResponse(200, "User logged out"));
 });

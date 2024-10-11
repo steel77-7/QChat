@@ -5,8 +5,8 @@ export const socketConnection = (httpServer) => {
   console.log("Socket server initialized");
   const io = new Server(httpServer, {
     cors: {
-      origin: "*",
-      methods: ["GET", "POST", "PATCH", "DELETE"],
+      origin: process.env.FRONTEND_URL,
+      methods: ["GET", "POST"],
     },
   });
 

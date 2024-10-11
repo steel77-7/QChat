@@ -1,22 +1,26 @@
-import IndividualContactBox from '@/components/chat/chatComponents/IndividualContactBox';
-import apiCall from '@/utils/apiCall';
-import { Input } from '@nextui-org/input';
-import React, { useEffect, useState } from 'react'
+import IndividualContactBox from "@/components/chat/chatComponents/IndividualContactBox";
+import apiCall from "@/utils/apiCall";
+import { Input } from "@nextui-org/input";
+import React, { useEffect, useState } from "react";
 
 export default function AddContact() {
-  const [search,setSearch]= useState('');
-  const [contactList,setContactList]=useState<any>(null)
+  const [search, setSearch] = useState("");
+  const [contactList, setContactList] = useState<any>(null);
 
   useEffect(() => {
     const fetchContactList = async () => {
-      const { data } = await apiCall({
-        url: "allContacts",
+      const { data, status } = await apiCall({
+        url: "utils/all_contacts",
         method: "GET",
       });
-      setContactList(data);
+      if (status === 200) setContactList(data);
     };
     fetchContactList();
   }, []);
+
+  useEffect(() => {
+    console.log("contact list:", contactList);
+  }, [contactList]);
 
   return (
     <>
@@ -36,20 +40,28 @@ export default function AddContact() {
           />
         </h1>
         <ul className="flex flex-col  border-r-2 border-white">
-          {!contactList === null ? (
+          {contactList && contactList !== null ? (
             contactList?.map((contact: any, index: any) => {
-              if (contact.name.toUpperCase().indexOf(search.toUpperCase()) > -1)
+              if (search !== "" && contact.username.indexOf(search) > -1)
                 return (
                   <li>
-                    <IndividualContactBox key={index} />
+                    <IndividualContactBox key={index}user={contact} />
                   </li>
                 );
+              else if (search === "") {
+                return (
+                  <li>
+                    <IndividualContactBox key={index} user={contact} />
+                  </li>
+                );
+              }
+
               return null;
             })
           ) : (
             <li>
               <div className="p-6 border hover:border-zinc-200 duration-400 ease-in-out hover:bg-zinc-900 rounded-md">
-              No users found
+                No users found
               </div>
             </li>
           )}
@@ -58,4 +70,3 @@ export default function AddContact() {
     </>
   );
 }
-
