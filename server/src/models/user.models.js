@@ -30,6 +30,12 @@ const userSchema = new mongoose.Schema(
         ref: "user",
       },
     ],
+    friendRequest: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user",
+      },
+    ],
     botStatus: {
       type: Boolean,
       default: false,
@@ -40,7 +46,7 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-userSchema.methods.generateAccessToken = async function() {
+userSchema.methods.generateAccessToken = async function () {
   const res = await jwt.sign(
     {
       _id: this._id,
@@ -49,7 +55,7 @@ userSchema.methods.generateAccessToken = async function() {
     },
     process.env.ACCESS_TOKEN_SECRET,
     {
-      expiresIn: '15s',
+      expiresIn: "15s",
     }
   );
   return res;
@@ -61,23 +67,23 @@ userSchema.pre("save", async function (next) {
   this.password = await bcryptjs.hash(this.password, salt);
 });
 
-userSchema.methods.generateRefreshToken = async function(){
+userSchema.methods.generateRefreshToken = async function () {
   const res = await jwt.sign(
     {
       _id: this._id,
     },
     process.env.REFRESH_TOKEN_SECRET,
-    { expiresIn: '1h' }
+    { expiresIn: "1h" }
   );
   return res;
 };
 
-userSchema.methods.comparePassword = async function(password) {
+userSchema.methods.comparePassword = async function (password) {
   const res = await bcryptjs.compare(password, this.password);
   return res;
 };
 
-userSchema.methods.decodeToken = function (){
+userSchema.methods.decodeToken = function () {
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
   return decoded;
 };

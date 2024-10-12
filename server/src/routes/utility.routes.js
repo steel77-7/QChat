@@ -1,10 +1,23 @@
 import { Router } from "express";
-import { allContacts } from "../controllers/utilities.controller.js";
+import {
+  acceptRequest,
+  allContacts,
+  fetchContacts,
+  fetchRequests,
+  sendRequest,
+} from "../controllers/utilities.controller.js";
 import { authenticator } from "../middleware/authenticator.js";
 
 const router = Router();
 
-router.route("/all_contacts").get(authenticator,allContacts);
+router.route("/all_contacts").get(authenticator, allContacts);
 
+router.route("/send_request").post(authenticator, sendRequest);
 
-export default router
+router.route("/accept_request").post(authenticator, acceptRequest);
+
+router.route("/fetch_requests").get(authenticator, fetchRequests);
+
+router.route("/fetch_contacts").post(authenticator, fetchContacts);
+
+export default router;

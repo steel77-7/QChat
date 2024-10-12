@@ -21,8 +21,8 @@ const apiCall = async ({
     console.log(response);
     return { data: response.data.data, status: response.status };
   } catch (error: any) {
+    console.error(error);
     if (error.response.status === 401) {
-      console.error(error);
       //logout if the status is something else
       if (!(await refreshToken())) {
         console.log("logout");

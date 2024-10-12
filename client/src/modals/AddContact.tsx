@@ -1,7 +1,9 @@
 import IndividualContactBox from "@/components/chat/chatComponents/IndividualContactBox";
 import apiCall from "@/utils/apiCall";
 import { Input } from "@nextui-org/input";
+import { Avatar } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function AddContact() {
   const [search, setSearch] = useState("");
@@ -45,13 +47,13 @@ export default function AddContact() {
               if (search !== "" && contact.username.indexOf(search) > -1)
                 return (
                   <li>
-                    <IndividualContactBox key={index}user={contact} />
+                    <IndividualContactBox key={index} user={contact} />
                   </li>
                 );
               else if (search === "") {
                 return (
                   <li>
-                    <IndividualContactBox key={index} user={contact} />
+                    <IndividualRequestBox key={index} user={contact} />
                   </li>
                 );
               }
@@ -66,6 +68,47 @@ export default function AddContact() {
             </li>
           )}
         </ul>
+      </div>
+    </>
+  );
+}
+
+function IndividualRequestBox({ user }: any) {
+  console.log(user._id)
+  function format(str: string) {
+    if (str.length > 25) {
+      return str.substring(0, 25) + "...";
+    } else return str;
+  }
+
+  async function sendRequest() {
+    const { status } = await apiCall({
+      url: "utils/send_request",
+      method: "POST",
+      reqData: { recipient: user._id },
+    });
+    if (status !== 200) {
+      toast.success(`Request was not sent`);
+      return;
+    }
+    toast.success(`Request send to ${user.username}`);
+  }
+
+  return (
+    <>
+      <div
+        className="flex w-full flex-1 gap-3   hover:bg-zinc-900 border duration-200 border-transparent hover:border-zinc-200  p-4 px-8 my-2 rounded-md"
+        onClick={sendRequest}
+      >
+        <Avatar size="lg" className="w-[45px] h-[45px]" />
+        <div className="flex flex-col  ">
+          <span>{format(user.username)}</span>
+          {user.lastmessage ? (
+            <span className="text-xs">last message:message</span>
+          ) : (
+            <span className="text-xs">{format(user.email)}</span>
+          )}
+        </div>
       </div>
     </>
   );

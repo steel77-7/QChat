@@ -13,7 +13,7 @@ const io = socketConnection(httpServer);
 
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin: 'http://localhost:5173',
     methods: ["GET", "POST", "PATCH", "DELETE"],
     credentials:true
   })
@@ -24,7 +24,9 @@ app.use((req, res, next) => {
   req.io = io;
   next();
 });
-
+app.get('/',(req,res)=>{
+  res.send(200).json({message:'hello'})
+})
 
 import user from "./routes/user.routes.js"
 import utilities from "./routes/utility.routes.js"

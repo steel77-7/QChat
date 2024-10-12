@@ -9,6 +9,7 @@ export const getuser = async () => {
 
     return { data, status };
   } catch (error: any) {
-    return { status: 401 };
+    console.log(error)
+    return {status: 401 };
   }
 };
