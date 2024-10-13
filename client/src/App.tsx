@@ -20,7 +20,9 @@ function App() {
             <Route element={<Signup />} path="/register" />
             <Route element={<Login />} path="/login" />
             <Route element={<ProtectedRoutes />}>
-              <Route element={<Chat />} path="/" />
+              <Route element={<Chat />} path="/" >
+              <Route path=":chatid"/>
+              </Route>
               <Route element={<FriendRequest/> }path={'requests'}/> 
             </Route>
             <Route path="*" element={<Error />} />

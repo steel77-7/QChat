@@ -15,7 +15,7 @@ export default function ContactArea() {
   return <>
   <div className="flex max-w-[300px] w-full max-h-full h-full">
 
-  {!addMemberPress?<ContactList contacts={null}/>:<AddContact/>}
+  {addMemberPress?<ContactList contacts={null}/>:<AddContact/>}
   </div>
   </>;
 }

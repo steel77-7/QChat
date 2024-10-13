@@ -44,9 +44,11 @@ export const fetchMessage = asyncHanlder(async (req, res) => {
   res
     .status(200)
     .json(
-      new ApiResponse(200, { messageArray: response, data: "messages found" })
+      new ApiResponse(200, { messageArray: response })
     );
 });
+
+
 export const deleteMessage = asyncHanlder(async (req, res) => {
 
   

@@ -16,7 +16,7 @@ export default function FriendRequest() {
         url: "utils/fetch_requests",
         method: "GET",
       });
-      console.log(data)
+      console.log(data);
       if (status !== 200) return;
       setRequestList(data.requests);
     })();
@@ -25,10 +25,8 @@ export default function FriendRequest() {
     <>
       <div className="flex gap-4">
         {" "}
-        <Link to="/" >
-        
-            <FaArrowAltCircleLeft size={40} color="" />
-         
+        <Link to="/">
+          <FaArrowAltCircleLeft size={40} color="" />
         </Link>
         <h1 className="text-4xl mb-5">Friend requests</h1>
       </div>
@@ -52,7 +50,7 @@ const IndividualRequestBox = ({ request }: any) => {
   // sendin ga true or false response to the server to accept or to not accept the request along with the recipient of the req
   async function handleRequest(sendStatus: boolean) {
     const { status } = await apiCall({
-      url: "hanlde_request",
+      url: "utils/handle_request",
       method: "POST",
       reqData: { sendStatus, recipient: request._id },
     });
@@ -72,7 +70,8 @@ const IndividualRequestBox = ({ request }: any) => {
             {" "}
             <Avatar size="lg" className="" />
             <h1>
-              <b>Username</b>
+              <b>{request.username}</b>
+              <p className="text-xs">{request.email}</p>
             </h1>
           </div>
           <div className="flex gap-2">

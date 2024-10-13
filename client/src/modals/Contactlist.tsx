@@ -8,21 +8,26 @@ import {
   Selection,
   listboxItem,
   Input,
+  useSelect,
 } from "@nextui-org/react";
 import IndividualContactBox from "@/components/chat/chatComponents/IndividualContactBox";
 import apiCall from "@/utils/apiCall";
+import { useSelector } from "react-redux";
 export default function ContactList({ contacts }: { contacts: any }) {
   //component states
   const [search, setSearch] = useState("");
   const [contactList, setContactList] = useState<any>(null);
+  const user = useSelector((state:any)=>state.user.user)
   //fetching contacts of a user from the backend
   useEffect(() => {
     const fetchContactList = async () => {
-      const { data } = await apiCall({
-        url: "contacts",
+      const { data,status } = await apiCall({
+        url: "utils/fetch_contacts",
         method: "GET",
       });
-      setContactList(data);
+      if(status===200){
+      setContactList(data.contacts);
+      console.log(data.contacts)}
     };
     fetchContactList();
   }, []);
@@ -40,7 +45,7 @@ export default function ContactList({ contacts }: { contacts: any }) {
             className="text-black"
             variant={`faded`}
             color="secondary"
-            value={search}
+            value={search}    
             onChange={(e) => setSearch(e.target.value)}
           />
         </h1>
@@ -48,15 +53,23 @@ export default function ContactList({ contacts }: { contacts: any }) {
           <li>
            {/*  <IndividualContactBox /> */}
           </li>
-          {!contactList === null ? (
+          {contactList ? (
             contactList?.map((contact: any, index: any) => {
-              if (contact.name.toUpperCase().indexOf(search.toUpperCase()) > -1)
+            
+              if (search!==''&&contact.username.indexOf(search) > -1)
                 return (
                   <li>
-                    <IndividualContactBox key={index} />
+                    <IndividualContactBox key={index} contact={contact} />
                   </li>
                 );
-              return null;
+                else if(search===''){
+                  return (
+                    <li>
+                      <IndividualContactBox key={index} contact={contact} />
+                    </li>
+                  );
+                }
+           
             })
           ) : (
             <li>

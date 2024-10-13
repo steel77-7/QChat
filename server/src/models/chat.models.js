@@ -10,25 +10,26 @@ const messageSchema = new mongoose.Schema(
     ],
     name: {
       type: String,
-      required: true,
     },
-    botChat:{
-      type:Boolean,
-      default:false
+    botChat: {
+      type: Boolean,
+      default: false,
     },
-    groupChat:{
-      type :Boolean,
-      default :false
+    isGroupChat: {
+      type: Boolean,
+      default: false,
     },
-    owner: { 
-      type: String,
-    }
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+      default:null
+    },
   },
   {
     timestamps: true,
   }
 );
 
-const Chat = new mongoose.model("message", messageSchema);
+const Chat = new mongoose.model("chat", messageSchema);
 
 export default Chat;

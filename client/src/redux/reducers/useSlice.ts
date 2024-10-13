@@ -4,6 +4,7 @@ import { createSlice } from "@reduxjs/toolkit"
 
 
 const user={ 
+    _id:null,
     email:null,
     name:null,
     uername:null,
