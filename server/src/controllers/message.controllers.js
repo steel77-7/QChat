@@ -31,11 +31,11 @@ export const saveMessage = asyncHanlder(async (req, res) => {
 });
 
 export const fetchMessage = asyncHanlder(async (req, res) => {
-  const { chatid } = req.body;
+  const  chatid = req.params.chatid;
   const user = req.user;
 
   const fetch_message = async () => {
-    const message = await Message.find({ chat: chatid });
+    const message = await Message.find({ chat: chatid }).populate('members', 'username email');
     return message;
   };
   const response = await getOrSetCache("message", fetch_message);

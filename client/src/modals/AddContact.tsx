@@ -1,8 +1,7 @@
-import IndividualContactBox from "@/components/chat/chatComponents/IndividualContactBox";
-import apiCall from "@/utils/apiCall";
-import { Input } from "@nextui-org/input";
-import { Avatar } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
+import { Input, Avatar, ScrollShadow } from "@nextui-org/react";
+import apiCall from "@/utils/apiCall";
+import IndividualContactBox from "@/components/chat/chatComponents/IndividualContactBox";
 import { toast } from "sonner";
 
 export default function AddContact() {
@@ -20,67 +19,56 @@ export default function AddContact() {
     fetchContactList();
   }, []);
 
-  useEffect(() => {
-    console.log("contact list:", contactList);
-  }, [contactList]);
-
   return (
-    <>
-      <div className="flex flex-col  w-full border-r-2 border-white">
-        <h1 className="bg-purple-800 rounded-tl-medium flex flex-col    p-3 h-[70px]">
-          {" "}
-          {/*   <div>Contacts{" "}</div> */}
-          <Input
-            size="sm"
-            type="text"
-            label="Search for a person"
-            className="text-black"
-            variant={`faded`}
-            color="secondary"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </h1>
-        <ul className="flex flex-col  border-r-2 border-white">
-          {contactList && contactList !== null ? (
-            contactList?.map((contact: any, index: any) => {
-              if (search !== "" && contact.username.indexOf(search) > -1)
+    <div className="flex flex-col w-full border-r-2 border-white h-full bg-purple-50 shadow-md">
+      {/* Search bar */}
+      <h1 className="bg-purple-800 rounded-tl-medium p-3 h-[70px] flex items-center justify-between">
+        <Input
+          size="sm"
+          type="text"
+          label="Search for a person"
+          className="text-black w-full"
+          variant="faded"
+          color="secondary"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </h1>
+      
+      {/* Contact list */}
+      <ScrollShadow>
+        <ul className="flex flex-col overflow-y-auto h-full">
+          {contactList && contactList.length > 0 ? (
+            contactList.map((contact: any, index: any) => {
+              if (search !== "" && contact.username.includes(search))
                 return (
-                  <li>
-                    <IndividualContactBox key={index} user={contact} />
+                  <li key={index}>
+                    <IndividualRequestBox user={contact} />
                   </li>
                 );
               else if (search === "") {
                 return (
-                  <li>
-                    <IndividualRequestBox key={index} user={contact} />
+                  <li key={index}>
+                    <IndividualRequestBox user={contact} />
                   </li>
                 );
               }
-
               return null;
             })
           ) : (
             <li>
-              <div className="p-6 border hover:border-zinc-200 duration-400 ease-in-out hover:bg-zinc-900 rounded-md">
-                No users found
+              <div className="p-6 border hover:border-zinc-200 transition-all duration-400 ease-in-out hover:bg-zinc-900 rounded-md">
+                No users found.
               </div>
             </li>
           )}
         </ul>
-      </div>
-    </>
+      </ScrollShadow>
+    </div>
   );
 }
 
 function IndividualRequestBox({ user }: any) {
-  console.log(user._id)
-  function format(str: string) {
-    if (str.length > 25) {
-      return str.substring(0, 25) + "...";
-    } else return str;
-  }
-
   async function sendRequest() {
     const { status } = await apiCall({
       url: "utils/send_request",
@@ -88,28 +76,22 @@ function IndividualRequestBox({ user }: any) {
       reqData: { recipient: user._id },
     });
     if (status !== 200) {
-      toast.success(`Request was not sent`);
+      toast.error(`Request was not sent`);
       return;
     }
-    toast.success(`Request send to ${user.username}`);
+    toast.success(`Request sent to ${user.username}`);
   }
 
   return (
-    <>
-      <div
-        className="flex w-full flex-1 gap-3   hover:bg-zinc-900 border duration-200 border-transparent hover:border-zinc-200  p-4 px-8 my-2 rounded-md"
-        onClick={sendRequest}
-      >
-        <Avatar size="lg" className="w-[45px] h-[45px]" />
-        <div className="flex flex-col  ">
-          <span>{format(user.username)}</span>
-          {user.lastmessage ? (
-            <span className="text-xs">last message:message</span>
-          ) : (
-            <span className="text-xs">{format(user.email)}</span>
-          )}
-        </div>
+    <div
+      className="flex w-full gap-4 items-center p-4 my-2 rounded-lg border transition-all duration-300 ease-in-out bg-white hover:bg-purple-600 hover:border-purple-400 active:bg-purple-700 cursor-pointer shadow-lg"
+      onClick={sendRequest}
+    >
+      <Avatar size="lg" src="/default-avatar.png" className="w-[45px] h-[45px]" />
+      <div className="flex flex-col justify-center">
+        <span className="text-md font-semibold">{user.username}</span>
+        <span className="text-sm text-gray-500">{user.email}</span>
       </div>
-    </>
+    </div>
   );
 }

@@ -31,8 +31,10 @@ app.get('/',(req,res)=>{
 import user from "./routes/user.routes.js"
 import utilities from "./routes/utility.routes.js"
 import { redis_client } from '../utils/redisClient.js';
+import message from "./routes/message.routes.js"
 app.use('/api/user',user);
 app.use('/api/utils',utilities);
+app.use('/api/messages',message);
 
 connectToDb()
 .then(() => {
@@ -41,6 +43,7 @@ connectToDb()
     socketConnection(httpServer)
     });
   }).then(()=> {
+    console.log('im here')
     redis_client();
   })
   .catch((err) => console.log("Server error", err));

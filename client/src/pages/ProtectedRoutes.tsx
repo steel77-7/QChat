@@ -12,19 +12,24 @@ import { setUser, setIsAuthenticated } from "@/redux/reducers/useSlice";
 ("framer-motion");
 import { Spinner } from "@nextui-org/react";
 import useSocket from "@/hooks/userSocket";
+import { setSocket } from "@/redux/reducers/appDataSlice";
 
 export default function ProtectedRoutes() {
+  //global variables for this file
   const [loading, setLoading] = useState(true);
- 
   const isauthenticated = useSelector(
     (state: any) => state.user.isAuthenticated
   );
-useSocket();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  //initializing the socketinstance
+  dispatch(setSocket(useSocket()));
+
+  //checking if the user is valid or not 
   useEffect(() => {
-    console.log(import.meta.env)
-    const checkuser:any = async () => {
+    console.log(import.meta.env);
+    const checkuser: any = async () => {
       const { data, status } = await getuser();
       console.log(data, status);
       if (status == 200) {
@@ -33,20 +38,17 @@ useSocket();
         setTimeout(() => {
           setLoading(false);
         }, 700);
-      
+
         return;
       }
-      if(status===500 ||status ===404) {
-        return navigate('/login')
+      if (status === 500 || status === 404) {
+        return navigate("/login");
       }
-      await checkuser()
-  
+      await checkuser();
     };
 
     checkuser();
   }, []);
-  
-   
 
   return loading ? (
     <div className="flex fixed justify-center w-full h-full">
@@ -59,7 +61,10 @@ useSocket();
       />
     </div>
   ) : isauthenticated ? (
-   <div className="overflow-none fixed w-screen  h-screen"> <Outlet /></div>
+    <div className="overflow-none fixed w-screen  h-screen">
+      {" "}
+      <Outlet />
+    </div>
   ) : (
     <Navigate to={"/login"} />
   );
