@@ -12,7 +12,7 @@ export const allContacts = asyncHandler(async (req, res) => {
     "email username"
   );
 
-  console.log("contact list", contact_list);
+  //console.log("contact list", contact_list);
 
   if (!contact_list || contact_list.length === 0) {
     return res.status(404).json(new ApiResponse(404, "No users found"));
@@ -23,7 +23,7 @@ export const allContacts = asyncHandler(async (req, res) => {
 
 export const sendRequest = asyncHandler(async (req, res) => {
   const { recipient } = req.body;
-  console.log(recipient);
+  //console.log(recipient);
   const user = await User.findByIdAndUpdate(
     recipient,
     {
@@ -33,7 +33,7 @@ export const sendRequest = asyncHandler(async (req, res) => {
     },
     { new: true }
   );
-  //console.log(user);
+  ////console.log(user);
   if (!user) {
     return res.status(404).json(new ApiResponse(404, "No users found"));
   }
@@ -85,7 +85,7 @@ export const fetchRequests = asyncHandler(async (req, res) => {
   const requests = await User.findById(req.user)
     .select("friendRequest")
     .populate("friendRequest", "email username");
-  console.log(requests);
+  //console.log(requests);
   if (!requests) {
     return res
       .status(404)

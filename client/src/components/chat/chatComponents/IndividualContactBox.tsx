@@ -21,7 +21,7 @@ export default function IndividualContactBox({ contact }: any) {
   let modifiedContact = { ...contact };
 
   if (!modifiedContact.isGroupChat) {
-    console.log("yessss");
+    //console.log("yessss");
 
     // Make a copy of members array
     let filteredMembers = modifiedContact.members.filter(
@@ -30,11 +30,12 @@ export default function IndividualContactBox({ contact }: any) {
 
     // Modify the copy, not the original object
     modifiedContact.name = filteredMembers[0].username;
-    console.log("contact", modifiedContact);
-    console.log(user);
+   // console.log("contact", modifiedContact);
+   // console.log(user);
   }
 
   async function handleClick() {
+
     dispatch(setCurrChat(modifiedContact)); // Dispatch the modified contact
     console.log("contact set");
   }
@@ -44,7 +45,7 @@ export default function IndividualContactBox({ contact }: any) {
       <Link to={`${contact._id}`} onClick={handleClick}>
         <div
           className={`flex w-full flex-1 gap-4 items-center p-4 my-2 rounded-lg border 
-          transition-all duration-300 ease-in-out bg-white hover:bg-purple-600 hover:border-purple-400 
+          transition-all duration-300 ease-in-out hover:bg-purple-600 hover:border-purple-400 
           active:bg-purple-700 cursor-pointer shadow-lg 
           ${
             currChatid === contact._id

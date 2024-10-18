@@ -49,7 +49,7 @@ export default function AddContact() {
               else if (search === "") {
                 return (
                   <li key={index}>
-                    <IndividualRequestBox user={contact} />
+                    <IndividualRequestBox user={contact}  />
                   </li>
                 );
               }

@@ -7,7 +7,7 @@ export const authenticator = asyncHanlder(
   asyncHanlder(async (req, res, next) => {
     try {
       const token = req.cookies?.accessToken;
-      console.log("authenicator");
+    //  console.log("authenicator");
       // console.log('access token',req.cookies)
 
       if (!token) {
@@ -21,7 +21,7 @@ export const authenticator = asyncHanlder(
           if (err) {
             throw new Error();
           }
-          console.log("decoded", res);
+       //   console.log("decoded", res);
           return res;
         }
       );

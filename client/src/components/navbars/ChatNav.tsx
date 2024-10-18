@@ -5,25 +5,29 @@ import {
   NavbarItem,
 } from "@nextui-org/navbar";
 import { Avatar, User } from "@nextui-org/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 export default function ChatNav() {
+
+
+
   const currChat = useSelector((state: any) => state.currChat.currChat);
   const user = useSelector((state: any) => state.user.user.user);
-console.log(user)
   let modifiedCurrChat = { ...currChat };
 
-  if (modifiedCurrChat && !modifiedCurrChat.isGroupChat) {
+  if (modifiedCurrChat._id && !modifiedCurrChat.isGroupChat) {
+//console.log(modifiedCurrChat)
     const filteredMembers = modifiedCurrChat.members.filter((m: any) => {
-      console.log(m)
+  
       m._id !== user._id;
     });
-    console.log(filteredMembers)
+
     modifiedCurrChat.name = filteredMembers[0]?.username || "Unknown User";
   }
 
-  console.log("currentchat::::::::::", modifiedCurrChat);
+  
+
 
   return (
     <div className="flex flex-1 w-full h-[70px] shadow-lg bg-gradient-to-r from-purple-600 to-indigo-600">

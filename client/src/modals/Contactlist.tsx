@@ -8,7 +8,7 @@ export default function ContactList({ contacts }: { contacts: any }) {
   const [search, setSearch] = useState("");
   const [contactList, setContactList] = useState<any>(null);
   const user = useSelector((state: any) => state.user.user);
-
+const socket = useSelector((state:any)=>state.appData.socketInstance)
   // Fetch contacts from backend
   useEffect(() => {
     const fetchContactList = async () => {
@@ -23,6 +23,11 @@ export default function ContactList({ contacts }: { contacts: any }) {
     };
     fetchContactList();
   }, []);
+//console.log(socket)
+function  handleClick(room:any){
+  console.log('clicked:::::::::::::')
+  socket.emit('join-room',room)
+}
 
   return (
     <div className="flex flex-col w-full border-r-2 border-white h-full bg-purple-50 shadow-md">
@@ -39,21 +44,22 @@ export default function ContactList({ contacts }: { contacts: any }) {
           onChange={(e) => setSearch(e.target.value)}
         />
       </h1>
-      
+  
       {/* Contact list */}
       <ScrollShadow>
         <ul className="flex flex-col overflow-y-auto h-full">
           {contactList ? (
             contactList.map((contact: any, index: any) => {
-              if (search !== "" && contact.username.includes(search))
+             // console.log(contact)
+              if (search !== "" && contact.name.indexOf(search)<-1)
                 return (
-                  <li key={index}>
-                    <IndividualContactBox contact={contact} />
+                  <li key={index}  onClick={()=>handleClick(contact._id)}>
+                    <IndividualContactBox contact={contact}  />
                   </li>
                 );
               else if (search === "") {
                 return (
-                  <li key={index}>
+                  <li key={index}  onClick={()=>handleClick(contact._id)}>
                     <IndividualContactBox contact={contact} />
                   </li>
                 );

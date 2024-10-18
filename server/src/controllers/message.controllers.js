@@ -8,8 +8,8 @@ import Redis from "redis";
 
 export const saveMessage = asyncHanlder(async (req, res) => {
   const user = req.user;
-  const { chatid, message } = req.body;
-
+  const { room, message } = req.body;
+console.log("save message",req.body)
   //should work but its to be tested rn
   if (user.botStatus) {
     const response = await generateResponse(message);
@@ -17,7 +17,7 @@ export const saveMessage = asyncHanlder(async (req, res) => {
 
   const saved_message = await Message.create({
     message: user.botStatus ? response : message,
-    chat: chatid,
+    chat: room,
     sender: user._id,
     bot: user.botStatus,
   });
@@ -25,7 +25,7 @@ export const saveMessage = asyncHanlder(async (req, res) => {
   if (!saved_message) {
     return res.status(500).json(new ApiResponse(500, "Message failed to save"));
   }
-
+  return res.status(200).json(new ApiResponse(200,{ message:saved_message}));
   //req.io.to(chatid).emit("recieve-message", saved_message);
   //return saved_message;
 });

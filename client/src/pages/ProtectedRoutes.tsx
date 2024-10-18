@@ -28,7 +28,7 @@ export default function ProtectedRoutes() {
 
   //checking if the user is valid or not 
   useEffect(() => {
-    console.log(import.meta.env);
+   // console.log(import.meta.env);
     const checkuser: any = async () => {
       const { data, status } = await getuser();
       console.log(data, status);

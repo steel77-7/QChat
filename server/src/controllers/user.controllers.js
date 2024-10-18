@@ -117,11 +117,11 @@ export const refreshToken = asyncHanlder(async (req, res) => {
   if (!refreshToken) {
     return res.status(401).json(new ApiResponse(401, "Token not present"));
   }
-  console.log(refreshToken)
+ // console.log(refreshToken)
   const user = await User.find({ refreshToken });
   if (!user)
     return res.status(404).json(new ApiResponse(404, "User not found"));
-  console.log(refreshToken);
+ // console.log(refreshToken);
   jwt.verify(
     refreshToken,
     process.env.REFRESH_TOKEN_SECRET,

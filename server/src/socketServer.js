@@ -14,15 +14,17 @@ export const socketConnection = (httpServer) => {
     console.log("Socket connected", socket.id);
 
     socket.on("join-room", (room) => {
+      console.log(room);
       socket.join(room);
-      io.to(room).emit("User joined");
+      console.log(socket.rooms);
+      socket.to(room).emit("recieve-message","sduyfgifg");
     });
 
-    socket.on("send-message", (message) => {
-      console.log("Received direct message:", message);
+    socket.on("send-message", (data) => {
+      console.log("Received direct message:", data.chat);
       console.log("rooms:", socket.rooms);
-      //socket.to(message.chat._id).emit("recieve-message", message);
-      io.to(message.chat).emit("recieve-message", message);
+
+      socket.to(data.chat).emit("recieve-message", data);
     });
 
     socket.on("disconnect", (reason) => {

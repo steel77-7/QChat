@@ -1,15 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const currChat={
-    _id:null,
-    email:null,
-    name:null,
-    profilePic:null,
-    isGroupchat:false
 
-}
 const initialState:any={
-currChat : currChat,
+currChat : null,
 notification:false
 }
 
@@ -24,7 +17,7 @@ const currChatSlice=createSlice({
             state.notification = action.payload
         },
         resetCurrChat : (state)=>{
-            state.currChat = currChat;
+            state.currChat = null;
             state.groupchat = false;
         }
     }
